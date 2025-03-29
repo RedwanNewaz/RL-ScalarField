@@ -24,7 +24,8 @@ class ImageExplorationEnv(gym.Env):
         self.agent_pos = (np.random.randint(0, 32) * self.grid_size,
                           np.random.randint(0, 32) * self.grid_size)
         self.visited.fill(False)
-        return self._get_observation()
+        
+        return self._get_observation(), {}
 
     def step(self, action):
         r, c = self.agent_pos
@@ -48,7 +49,8 @@ class ImageExplorationEnv(gym.Env):
         return self._get_observation(), reward, done, False, {}
 
     def _get_observation(self):
-        return (self.base_map * self.visited.astype(np.uint8))[:, :, None]
+        image=(self.base_map * self.visited.astype(np.uint8))[:, :, None]
+        return np.squeeze(image)
 
     def render(self, mode=None, scale_factor=3):
         if mode is None:
