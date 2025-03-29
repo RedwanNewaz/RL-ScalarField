@@ -13,7 +13,7 @@ map_array = np.array(img, dtype=np.uint8)
 env = ImageExplorationEnv(map_array, max_steps=700, render_mode="human")
 
 
-model = PPO("MlpPolicy", env, verbose=1)
+model = PPO("MlpPolicy", env, verbose=1, tensorboard_log="./ppo_scalarfield_tensorboard/")
 model.learn(total_timesteps=10_000)
 
 vec_env = model.get_env()
@@ -27,3 +27,6 @@ for i in range(1000):
       obs = env.reset()
 
 env.close()
+
+model.save('ppo_agent')
+
