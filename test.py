@@ -21,8 +21,12 @@ model = PPO.load("ppo_agent")
 mean_reward, std_reward = evaluate_policy(model, model.get_env(), n_eval_episodes=10)
 
 # Enjoy trained agent
-obs = env.reset()
+#obs = env.reset()
+obs, _ = env.reset()
+
 for i in range(1000):
     action, _states = model.predict(obs)
-    obs, rewards, dones, info = env.step(action)
+    #obs, rewards, dones, info = env.step(action)
+    obs, rewards, dones, _, _ = env.step(action)
+
     env.render()

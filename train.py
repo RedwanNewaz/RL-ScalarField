@@ -17,10 +17,11 @@ model = PPO("MlpPolicy", env, verbose=1, tensorboard_log="./ppo_scalarfield_tens
 model.learn(total_timesteps=10_000)
 
 vec_env = model.get_env()
-obs = vec_env.reset()
+obs, _ = vec_env.reset()
 for i in range(1000):
     action, _states = model.predict(obs, deterministic=True)
-    obs, reward, done, info = vec_env.step(action)
+    obs, reward, done, _, _ = vec_env.step(action)
+
     vec_env.render()
     # VecEnv resets automatically
     if done:
