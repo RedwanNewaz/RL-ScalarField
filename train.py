@@ -1,6 +1,6 @@
 import gymnasium as gym
 from stable_baselines3 import PPO
-from custom_environment24_25 import ImageExplorationEnv
+from ScalarFieldEnv import ScalarFieldEnv
 from PIL import Image
 import numpy as np
 import os
@@ -15,8 +15,8 @@ img = Image.open(image_path).resize((256, 256))
 map_array = np.array(img, dtype=np.uint8)
 
 # Create environment
-env = ImageExplorationEnv(map_array, max_steps=5000, render_mode="human")
-output = "trainingv29_E23_S50K"
+env = ScalarFieldEnv(map_array, max_steps=1000, render_mode="human")
+output = "trainingv30_E23_S50K"
 os.makedirs(output, exist_ok=True)
 # Set tensorboard log directory
 log_dir_root = os.path.join(output, "ppo_scalarfield_tensorboard")

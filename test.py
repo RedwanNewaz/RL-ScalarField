@@ -1,5 +1,4 @@
 from stable_baselines3 import PPO
-from custom_environment import ImageExplorationEnv
 from ScalarFieldEnv import ScalarFieldEnv
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
