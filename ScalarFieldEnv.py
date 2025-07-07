@@ -157,6 +157,12 @@ class ScalarFieldEnv(gym.Env):
         epsilon = self.epsilon / self.__step_taken
         reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
 
+
+        # 1. Penalize staying too long in same cell
+        if self.visit_count[grid_y, grid_x] > 5:
+            reward -= 0.5
+
+
         done = self.__step_taken >= self.max_steps
         info = {
             'grid_position': (grid_x, grid_y),

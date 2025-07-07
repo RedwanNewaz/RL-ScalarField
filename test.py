@@ -7,7 +7,7 @@ import numpy as np
 import os
 np.random.seed(10)
 
-image_path = "N17E073.jpg"
+image_path = "TEST-N47W124.jpg"
 #img = Image.open(image_path).convert("L").resize((256, 256))
 img = Image.open(image_path).resize((256, 256))
 map_array = np.array(img, dtype=np.uint8)
