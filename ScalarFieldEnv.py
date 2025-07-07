@@ -4,7 +4,6 @@ from gymnasium import spaces
 import numpy as np
 from dataclasses import dataclass
 import cv2
-from sympy.abc import epsilon
 
 
 @dataclass
@@ -75,7 +74,7 @@ class Robot:
 
 class ScalarFieldEnv(gym.Env):
     def __init__(self, map_array: np.ndarray, max_steps: int = 1000, num_square_cells: int = 32,
-                 render_mode: str = "human"):
+                 render_mode: str = "human", epsilon: float = 0.99):
         super().__init__()
         self.base_map = map_array.astype(np.uint8)
         assert self.base_map.shape == (256, 256), "Map must be 256x256 pixels"
@@ -90,6 +89,7 @@ class ScalarFieldEnv(gym.Env):
         self.num_square_cells = num_square_cells
         self.__step_taken = 0
         self.render_mode = render_mode
+        self.epsilon = epsilon
 
         # gym spaces
         self.action_space = spaces.MultiDiscrete(
@@ -154,7 +154,7 @@ class ScalarFieldEnv(gym.Env):
         obs = self._get_observation()
         self.__step_taken += 1
 
-        epsilon = 0.99 / self.__step_taken
+        epsilon = self.epsilon / self.__step_taken
         reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
 
         done = self.__step_taken >= self.max_steps
