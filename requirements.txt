@@ -1,0 +1,4 @@
+gymnesium
+matplotlib
+stable-baselines3[extra]
+tensorboard
