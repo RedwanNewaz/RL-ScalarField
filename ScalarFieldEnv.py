@@ -10,7 +10,7 @@ import cv2
 class RobotConfig:
     linear_velocities = [0.25, 0.5, 0.75, 1.0]
     angular_velocities = [-0.7, -0.35, 0.0, 0.35, 0.7]
-    dt: float = 1.0
+    dt: float = 0.5
     obs_length: int = 2 + 1 + 256 * 256
 
 

@@ -14,8 +14,10 @@ map_array = np.array(img, dtype=np.uint8)
 
 # Wrap your environment
 # env = DummyVecEnv([lambda: ImageExplorationEnv(map_array, max_steps=5000, render_mode="human")])
-env = DummyVecEnv([lambda: ScalarFieldEnv(map_array, max_steps=1000, render_mode="human")])
-output = "trainingv29_E23_S50K"
+env = DummyVecEnv([lambda: ScalarFieldEnv(map_array,
+                            num_square_cells = 32,
+                            max_steps=5000, render_mode="human")])
+output = "trainingv30_E23_S50K"
 model_path = os.path.join(output, "ppo_agent.zip")
 # Load the trained agent
 model = PPO.load(model_path)
