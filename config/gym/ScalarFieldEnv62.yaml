@@ -1,0 +1,5 @@
+name: "ScalarFieldEnv62"
+num_square_cells: 62
+max_steps: 5000
+render_mode: "human"
+epsilon: 0.99
