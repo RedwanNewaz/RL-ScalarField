@@ -1,5 +1,5 @@
 name: "ScalarFieldEnv1"
-num_square_cells: 64
+num_square_cells: 32
 max_steps: 2500
 render_mode: "human"
 epsilon: 0.99
