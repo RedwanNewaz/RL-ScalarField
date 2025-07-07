@@ -2,24 +2,14 @@ import gymnasium as gym
 import math
 from gymnasium import spaces
 import numpy as np
-from dataclasses import dataclass
 import cv2
-
-
-@dataclass
-class RobotConfig:
-    linear_velocities = [0.25, 0.5, 0.75, 1.0]
-    angular_velocities = [-0.7, -0.35, 0.0, 0.35, 0.7]
-    dt: float = 0.5
-    obs_length: int = 2 + 1 + 256 * 256
-    state_dim: int = 4  # x, y, theta, v
-
-
 class Robot:
-    def __init__(self, config: RobotConfig, grid_bounds: int = 32):
+    def __init__(self, config, grid_bounds: int = 32):
         self.config = config
         self.grid_bounds = grid_bounds
         self.state = np.zeros((config.state_dim, 1))  # x, y, theta, v
+        self.linear_velocities = np.array(config.linear_velocities)
+        self.angular_velocities = np.array(config.angular_velocities)
 
     def reset(self, position):
         # x, y, theta, v
@@ -28,16 +18,16 @@ class Robot:
 
     def predict(self, action):
         v_indx, w_indx = action
-        linear_velocity = self.config.linear_velocities[v_indx]
-        angular_velocity = self.config.angular_velocities[w_indx]
+        linear_velocity = self.linear_velocities[v_indx]
+        angular_velocity = self.angular_velocities[w_indx]
         u = np.array([[linear_velocity], [angular_velocity]], dtype=np.float32)
         state = self.motion_model(self.state, u, self.config.dt)
         return np.squeeze(self.observation_model(state))
 
     def update(self, action):
         v_indx, w_indx = action
-        linear_velocity = self.config.linear_velocities[v_indx]
-        angular_velocity = self.config.angular_velocities[w_indx]
+        linear_velocity = self.linear_velocities[v_indx]
+        angular_velocity = self.angular_velocities[w_indx]
         u = np.array([[linear_velocity], [angular_velocity]], dtype=np.float32)
         self.state = self.motion_model(self.state, u, self.config.dt)
         # Clip to stay within bounds (0 to grid_bounds-1)
@@ -74,7 +64,7 @@ class Robot:
 
 
 class ScalarFieldEnv(gym.Env):
-    def __init__(self, map_array: np.ndarray, max_steps: int = 1000, num_square_cells: int = 32,
+    def __init__(self, robotConf, map_array: np.ndarray, max_steps: int = 1000, num_square_cells: int = 32,
                  render_mode: str = "human", epsilon: float = 0.99):
         super().__init__()
         self.base_map = map_array.astype(np.uint8)
@@ -84,9 +74,10 @@ class ScalarFieldEnv(gym.Env):
         self.max_steps = max_steps
         # Fixed: Initialize visit_count with correct dimensions (32x32 grid)
         self.visit_count = np.zeros((num_square_cells, num_square_cells), dtype=int)
-        self.__robot_config = RobotConfig()
+        self.__robot_config = robotConf
+
         # Fixed: Pass grid bounds to robot
-        self.__robot = Robot(self.__robot_config, num_square_cells)
+        self.__robot = Robot(robotConf, num_square_cells)
         self.num_square_cells = num_square_cells
         self.__step_taken = 0
         self.render_mode = render_mode

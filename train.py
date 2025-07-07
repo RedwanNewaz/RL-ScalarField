@@ -21,7 +21,7 @@ def main(cfg: DictConfig) -> None:
     map_array = np.array(img, dtype=np.uint8)
 
     # Create environment
-    env = ScalarFieldEnv(map_array,
+    env = ScalarFieldEnv(cfg.robot, map_array,
                    num_square_cells=cfg.gym.num_square_cells,
                    max_steps=cfg.gym.max_steps,
                    render_mode=cfg.gym.render_mode,

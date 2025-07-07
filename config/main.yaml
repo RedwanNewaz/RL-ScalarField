@@ -1,6 +1,6 @@
 seed: 42
 total_timesteps: 10000
-output: "results/trainingv30_E23_S50K"
+output: "results/trainingv31_E23_S50K"
 visualize: false
 n_eval_episodes: 10
 # algorithmic components

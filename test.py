@@ -19,7 +19,8 @@ def main(cfg: DictConfig) -> None:
     map_array = np.array(img, dtype=np.uint8)
 
     # Wrap your environment
-    env = DummyVecEnv([lambda: ScalarFieldEnv(map_array,
+    env = DummyVecEnv([lambda: ScalarFieldEnv(cfg.robot,
+                                              map_array,
                                               num_square_cells=cfg.gym.num_square_cells,
                                               max_steps=cfg.gym.max_steps,
                                               render_mode=cfg.gym.render_mode,
