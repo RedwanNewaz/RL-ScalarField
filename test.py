@@ -1,5 +1,5 @@
 from stable_baselines3 import PPO
-from custom_environmentold import ImageExplorationEnv
+from custom_environment import ImageExplorationEnv
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
 from PIL import Image
