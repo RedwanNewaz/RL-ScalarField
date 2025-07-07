@@ -12,13 +12,14 @@ class RobotConfig:
     angular_velocities = [-0.7, -0.35, 0.0, 0.35, 0.7]
     dt: float = 0.5
     obs_length: int = 2 + 1 + 256 * 256
+    state_dim: int = 4  # x, y, theta, v
 
 
 class Robot:
     def __init__(self, config: RobotConfig, grid_bounds: int = 32):
         self.config = config
         self.grid_bounds = grid_bounds
-        self.state = np.zeros((4, 1))  # x, y, theta, v
+        self.state = np.zeros((config.state_dim, 1))  # x, y, theta, v
 
     def reset(self, position):
         # x, y, theta, v
@@ -156,6 +157,10 @@ class ScalarFieldEnv(gym.Env):
 
         epsilon = self.epsilon / self.__step_taken
         reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
+        # if self.visit_count[grid_y, grid_x] == 1:
+        #     reward = self.base_map[grid_y, grid_x] / 255.0 # First visit bonus
+        # else:
+        #     reward = -0.10  # Penalty for revisiting
 
         done = self.__step_taken >= self.max_steps
         info = {

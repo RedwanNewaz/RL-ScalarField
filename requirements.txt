@@ -2,3 +2,4 @@ gymnesium
 matplotlib
 stable-baselines3[extra]
 tensorboard
+hydra-core
