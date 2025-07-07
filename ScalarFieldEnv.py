@@ -68,7 +68,6 @@ class ScalarFieldEnv(gym.Env):
                  render_mode: str = "human", epsilon: float = 0.99):
         super().__init__()
         self.base_map = map_array.astype(np.uint8)
-        assert self.base_map.shape == (256, 256), "Map must be 256x256 pixels"
         self.height, self.width = self.base_map.shape
         self.grid_size = self.width // num_square_cells
         self.max_steps = max_steps
@@ -132,6 +131,19 @@ class ScalarFieldEnv(gym.Env):
         self.__robot.reset(position=(grid_x, grid_y))
         return self._get_observation(), {}
 
+    def get_reward(self, grid_x, grid_y):
+        self.__step_taken += 1
+        # Update visit count for the grid cell
+        self.visit_count[grid_y, grid_x] += 1
+
+        epsilon = self.epsilon / self.__step_taken
+        reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
+        # if self.visit_count[grid_y, grid_x] == 1:
+        #     reward = self.base_map[grid_y, grid_x] / 255.0 # First visit bonus
+        # else:
+        #     reward = -0.10  # Penalty for revisiting
+        return reward
+
     def step(self, action):
         self.__robot.update(action)
         x, y, _, _ = self.__robot.state.flatten()
@@ -140,19 +152,8 @@ class ScalarFieldEnv(gym.Env):
         grid_x = int(np.clip(x, 0, self.num_square_cells - 1))
         grid_y = int(np.clip(y, 0, self.num_square_cells - 1))
 
-        # Update visit count for the grid cell
-        self.visit_count[grid_y, grid_x] += 1
-
         obs = self._get_observation()
-        self.__step_taken += 1
-
-        epsilon = self.epsilon / self.__step_taken
-        reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
-        # if self.visit_count[grid_y, grid_x] == 1:
-        #     reward = self.base_map[grid_y, grid_x] / 255.0 # First visit bonus
-        # else:
-        #     reward = -0.10  # Penalty for revisiting
-
+        reward = self.get_reward(grid_x, grid_y)
         done = self.__step_taken >= self.max_steps
         info = {
             'grid_position': (grid_x, grid_y),

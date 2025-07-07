@@ -1,13 +1,14 @@
 seed: 42
-total_timesteps: 10000
+total_timesteps: 100000
 output: "results/trainingv31_E23_S50K"
-visualize: false
+visualize: true
 n_eval_episodes: 10
 # algorithmic components
 defaults:
-  - map: N17E073
+  - map: n35w107
   - gym: ScalarFieldEnv1
   - robot: Uni4D
+  - benchmark: poamN35w105
   - override hydra/hydra_logging: disabled
   - override hydra/job_logging: disabled
   - _self_

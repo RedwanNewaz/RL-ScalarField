@@ -38,17 +38,17 @@ def main(cfg: DictConfig) -> None:
         obs = env.reset()
         episode = 0
         max_episodes = cfg.n_eval_episodes
-        total_reward = 0.0
+        episode_reward = 0.0
         while episode < max_episodes:
             action, _states = model.predict(obs)
             obs, rewards, dones, info = env.step(action)
             env.render()
-            total_reward += rewards[0]
+            episode_reward += rewards[0]
             if dones:
                 episode += 1
                 obs = env.reset()
-                print(f"Episode {episode} finished with avg reward: {total_reward / max_episodes:.4f}")
-                total_reward = 0.0
+                print(f"Episode {episode} finished with episode reward: {episode_reward:.4f}")
+                episode_reward = 0.0
     else:
         print("Evaluating the agent {} for {} episodes. This will take some times ..".format(output, cfg.n_eval_episodes))
         mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=cfg.n_eval_episodes)
