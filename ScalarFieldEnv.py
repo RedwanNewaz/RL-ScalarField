@@ -71,7 +71,7 @@ class ScalarFieldEnv(gym.Env):
         self.height, self.width = self.base_map.shape
         self.grid_size = self.width // num_square_cells
         self.max_steps = max_steps
-        # Fixed: Initialize visit_count with correct dimensions (32x32 grid)
+        # Fixed: Initialize visit_count with correct dimensions (nxn grid)
         self.visit_count = np.zeros((num_square_cells, num_square_cells), dtype=int)
         self.__robot_config = robotConf
 
