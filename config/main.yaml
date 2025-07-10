@@ -1,14 +1,14 @@
 seed: 42
-total_timesteps: 100000
-output: "results/trainingv1N35w105"
+total_timesteps: 300000
+output: "results/trainingv3n17e073"
 visualize: true
 n_eval_episodes: 10
 # algorithmic components
 defaults:
-  - map: n35w107
+  - map: n17e073
   - gym: ScalarFieldEnv62
   - robot: Uni4D
-  - benchmark: poamN35w105
+  - benchmark: poamn17e073
   - override hydra/hydra_logging: disabled
   - override hydra/job_logging: disabled
   - _self_

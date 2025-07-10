@@ -30,6 +30,8 @@ def main(cfg: DictConfig) -> None:
     # load trajectory
     traj_path = cfg.benchmark.npy_file
     traj = np.load(traj_path)
+    #traj = np.load("results/trainingv1n35w107/trajectories/episode_003_trajectory.npy") - 31.0
+
     # normalize traj
     traj = (traj + cfg.gym.num_square_cells / 2.0)
 

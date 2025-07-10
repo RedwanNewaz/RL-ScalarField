@@ -1,6 +1,6 @@
 map:
-  map_name: N17E073
-  file_path: data/img/N17E073.jpg
+  map_name: n17e073
+  file_path: data/img/n17e073.jpg
   resolution:
   - 256
   - 256

@@ -137,7 +137,11 @@ class ScalarFieldEnv(gym.Env):
         self.visit_count[grid_y, grid_x] += 1
 
         epsilon = self.epsilon / self.__step_taken
-        reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
+        #reward = self.base_map[grid_y, grid_x] / 255.0  + epsilon / np.sqrt(np.log(self.visit_count[grid_y, grid_x] + 1))
+        reward = self.base_map[grid_y, grid_x] / 255.0 - np.sqrt(np.log(self.visit_count[grid_y, grid_x]))
+
+        #if self.visit_count[grid_y, grid_x] > 5:
+        #    reward -= 0.5
         # if self.visit_count[grid_y, grid_x] == 1:
         #     reward = self.base_map[grid_y, grid_x] / 255.0 # First visit bonus
         # else:
@@ -156,6 +160,7 @@ class ScalarFieldEnv(gym.Env):
         reward = self.get_reward(grid_x, grid_y)
         done = self.__step_taken >= self.max_steps
         info = {
+            'position': (x, y),
             'grid_position': (grid_x, grid_y),
             'visit_count': self.visit_count[grid_y, grid_x],
             'total_visited_cells': np.sum(self.visit_count > 0)
